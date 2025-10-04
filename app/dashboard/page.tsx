@@ -29,6 +29,7 @@ export default function DashboardPage() {
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedLanguage, setSelectedLanguage] = useState('')
+  const [copiedId, setCopiedId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -110,6 +111,13 @@ export default function DashboardPage() {
     } catch {
       console.error('Error deleting snippet')
     }
+  }
+
+  const shareSnippet = (id: string) => {
+    const url = `${window.location.origin}/snippets/${id}`
+    navigator.clipboard.writeText(url)
+    setCopiedId(id)
+    setTimeout(() => setCopiedId(null), 2000)
   }
 
   if (status === 'loading' || loading) {
@@ -296,14 +304,24 @@ export default function DashboardPage() {
                         </div>
                       )}
                     </div>
-                    {snippet.user.email === session?.user?.email && (
-                      <button
-                        onClick={() => deleteSnippet(snippet.id)}
-                        className="text-red-600 hover:text-red-800 text-sm"
-                      >
-                        Delete
-                      </button>
-                    )}
+                    <div className="flex gap-2">
+                      {snippet.isPublic && (
+                        <button
+                          onClick={() => shareSnippet(snippet.id)}
+                          className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                        >
+                          {copiedId === snippet.id ? '✓ Copied!' : 'Share'}
+                        </button>
+                      )}
+                      {snippet.user.email === session?.user?.email && (
+                        <button
+                          onClick={() => deleteSnippet(snippet.id)}
+                          className="text-red-600 hover:text-red-800 text-sm"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="rounded-md overflow-hidden">
                     <SyntaxHighlighter

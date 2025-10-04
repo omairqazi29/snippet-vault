@@ -27,6 +27,7 @@ export default function PublicSnippetPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
 
   const fetchSnippet = async () => {
     try {
@@ -160,11 +161,12 @@ export default function PublicSnippetPage() {
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(shareUrl)
-                      alert('Link copied to clipboard!')
+                      setLinkCopied(true)
+                      setTimeout(() => setLinkCopied(false), 2000)
                     }}
-                    className="text-sm text-blue-600 hover:text-blue-800"
+                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                   >
-                    Share Link
+                    {linkCopied ? '✓ Link Copied!' : 'Share Link'}
                   </button>
                 )}
               </div>
