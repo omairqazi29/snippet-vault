@@ -5,11 +5,12 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const snippet = await prisma.snippet.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: {
           select: {
@@ -49,9 +50,10 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -62,7 +64,7 @@ export async function PUT(
     }
 
     const snippet = await prisma.snippet.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!snippet) {
@@ -82,7 +84,7 @@ export async function PUT(
     const { title, description, code, language, isPublic, tags } = await request.json()
 
     const updatedSnippet = await prisma.snippet.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         description,
@@ -114,9 +116,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.id) {
@@ -127,7 +130,7 @@ export async function DELETE(
     }
 
     const snippet = await prisma.snippet.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!snippet) {
@@ -145,7 +148,7 @@ export async function DELETE(
     }
 
     await prisma.snippet.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ message: 'Snippet deleted' })
