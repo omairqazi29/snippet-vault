@@ -2,6 +2,8 @@
 
 A modern full-stack code snippet manager for developers. Save, organize, and share code snippets with syntax highlighting across 150+ languages.
 
+🚀 **Live Demo**: [https://snippet-vault-f2ps.onrender.com](https://snippet-vault-f2ps.onrender.com)
+
 ## Features
 
 - 🔐 User authentication (register/login)
