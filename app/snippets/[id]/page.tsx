@@ -28,10 +28,6 @@ export default function PublicSnippetPage() {
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    fetchSnippet()
-  }, [params.id])
-
   const fetchSnippet = async () => {
     try {
       const response = await fetch(`/api/snippets/${params.id}`)
@@ -41,12 +37,17 @@ export default function PublicSnippetPage() {
       } else {
         setError('Snippet not found or you do not have access')
       }
-    } catch (error) {
+    } catch {
       setError('Failed to load snippet')
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchSnippet()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id])
 
   const copyToClipboard = () => {
     if (snippet) {

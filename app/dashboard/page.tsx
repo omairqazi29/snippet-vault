@@ -44,12 +44,6 @@ export default function DashboardPage() {
     }
   }, [status, router])
 
-  useEffect(() => {
-    if (session) {
-      fetchSnippets()
-    }
-  }, [session, search, selectedLanguage])
-
   const fetchSnippets = async () => {
     try {
       const params = new URLSearchParams()
@@ -59,12 +53,19 @@ export default function DashboardPage() {
       const response = await fetch(`/api/snippets?${params}`)
       const data = await response.json()
       setSnippets(data)
-    } catch (error) {
-      console.error('Error fetching snippets:', error)
+    } catch {
+      console.error('Error fetching snippets')
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (session) {
+      fetchSnippets()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, search, selectedLanguage])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -90,8 +91,8 @@ export default function DashboardPage() {
         })
         fetchSnippets()
       }
-    } catch (error) {
-      console.error('Error creating snippet:', error)
+    } catch {
+      console.error('Error creating snippet')
     }
   }
 
@@ -106,8 +107,8 @@ export default function DashboardPage() {
       if (response.ok) {
         fetchSnippets()
       }
-    } catch (error) {
-      console.error('Error deleting snippet:', error)
+    } catch {
+      console.error('Error deleting snippet')
     }
   }
 
