@@ -42,4 +42,5 @@ yarn-error.log*
 next-env.d.ts
 
 # prisma
-prisma/migrations
+# Keep migrations in version control for production deploys
+# prisma/migrations
